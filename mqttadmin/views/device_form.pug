@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    h1=title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='name') Name:
+            input#name.form-control(type='text', placeholder='Device name' name='name' required='true' value=(undefined===device ? '' : device.name) )
+            label(for='type') Type:
+            input#type.form-control(type='text', placeholder='Device type' name='type' required='true' value=(undefined === device ? '' : device.type) )
+        div.form-group
+            label(for='password') Password:
+            input#password.form-control(type='password', placeholder='Password' name='password' required='true' value='' )
+        //div.form-group
+        //    label(for='superuser') Superuser:
+        //    input#superuser.form-control(type='checkbox', name='superuser' checked=(undefined === device ? '' : device.superuser) )
+        //div.form-group
+        //    label Topics
+        //    if undefined === device
+        //        input#topic_key.form-control(type='text', placeholder='topic/#' name='topic' required='true' value=(undefined === device ? '' : (key + ' ' + val)) )
+        //    else
+        //        each val, key in device.topics
+        //            input#topic_key.form-control(type='text', placeholder='topic/#' name='topic' required='true' value=(undefined===device ? '' : (key+' '+val)) )
+
+        button.btn.btn-primary(type='submit') Submit
+
+    if errors
+        ul
+            for error in errors
+                li!= error.msg

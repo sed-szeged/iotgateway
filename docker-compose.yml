@@ -1,0 +1,35 @@
+version: '2'
+services:
+    mauthp:
+        image: mauthp
+        container_name: "mauthp"
+        environment:
+            - FOO=bar
+        ports:
+            - 1883:1883
+            - 9001:9001
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+    mqttadmin:
+        image: mqttadmin
+        container_name: "mqttadmin"
+        environment:
+            - FOO=bar
+        ports:
+            - 3000:3000
+        links:
+            - mongodb
+        depends_on:
+            - mauthp
+    mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        environment:
+          - MONGO_DATA_DIR=/data/db
+        volumes:
+          - ./data/db:/data/db
+        ports:
+            - 27017:27017
+        command: mongod --profile=2 --smallfiles

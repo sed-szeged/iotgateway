@@ -1,0 +1,87 @@
+
+
+
+MOSQUITTO
+Ubuntu mosquitto compile error
+	mosquitto/config.mk ->
+		WITH_DOCS:=no
+
+Docker runs mosquitto as root
+	mosquitto.conf ->
+		user root
+
+Use the auth plugin
+	mosquitto.conf ->
+		auth_plugin /mauthp/mosquitto-auth-plug/auth-plug.so
+
+User DB config
+	mosquitto.conf ->
+		auth_opt_backends mongo
+		auth_opt_mongo_uri mongodb://mongodb:27017
+
+MOSQUITTO AUTH PLUGIN
+Use mongodb
+	config.mk ->
+		BACKEND_MONGO ?= yes
+
+Set mosquitto source dir
+	config.mk ->
+		MOSQUITTO_SRC = /mauthp/mosquitto
+
+
+DB
+user
+{
+    [user_username_prop]: string, // Username as given in the MQTT connect request
+    [user_password_prop]: string, // A PBKDF2 hash, see 'Passwords' section
+    [user_topiclist_fk_prop]: int | oid | string, // reference to a document in collection_topics)
+    [user_topics_prop]: string[] | { [topic: string]: "r"|"w"|"rw" }, // see 'ACL format'
+    [user_superuser_prop]: int | boolean // optional, superuser if truthy
+}
+example
+{
+    "username": "user1",
+    "password": "PBKDF2$sha256$901$8ebTR72Pcmjl3cYq$SCVHHfqn9t6Ev9sE6RMTeF3pawvtGqTu",
+    "superuser": false,
+    "topics": {
+        "public/#": "r",
+	"client/user1/#": "rw"
+    }
+}
+
+topic
+{
+    [topiclist_key_prop]: int | oid | string, // unique id, as referenced by users[user_topiclist_fk_prop],
+    [topiclist_topics_prop]: string[] | { [topic: string]: "r"|"w"|"rw" } // see 'ACL format'
+}
+
+uri	mongodb://localhost:27107	MongoDB connection string (database part is ignored)
+database	mqGate	Name of the database containing users (and topiclists)
+user_coll	users	Collection for user documents
+topiclist_coll	topics	Collection for topiclist documents (optional if embedded topics are used)
+user_username_prop	username	Username property name in the user document
+user_password_prop	password	Password property name in the user document
+user_superuser_prop	superuser	Superuser property name in the user document
+user_topics_prop	topics	Name of a property on the user document containing an embedded topic list
+user_topiclist_fk_prop	topics	Property used as a foreign key to reference a topiclist document
+topiclist_key_prop	_id	Unique key in the topiclist document pointed to by user_topiclist_fk_prop
+topiclist_topics_prop	topics	Property containing topics within the topiclist document
+
+np -p tpassw
+PBKDF2$sha256$901$bA9+lF8E4hpb5Utp$R3Lgte8+unnYDAHw3BjcoBEJMlLDmU+M
+
+{
+    "username": "tuser",
+    "password": "PBKDF2$sha256$901$bA9+lF8E4hpb5Utp$R3Lgte8+unnYDAHw3BjcoBEJMlLDmU+M",
+    "superuser": false,
+    "topics": {
+        "public/#": "r",
+	"client/tuser/#": "rw"
+    }
+}
+
+docker run --link mongodb:mongo --net mosquittoauthplugin_default -p 8081:8081 mongo-express
+
+mosquitto_sub -t "client/tuser" -u tuser -P tpassw
+mosquitto_pub -t "client/tuser" -u tuser -P tpassw -m uzenet
+

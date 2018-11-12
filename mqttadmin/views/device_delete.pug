@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+    h1 Device: #{device.name}
+
+    div(style='margin-left:20px;margin-top:20px')
+
+        dl
+            dt
+                a(href=device.url) #{device.name}
+            dd Type: #{device.type}
+            dd Superuser: #{device.superuser}
+            dd Topics:
+                each val, key in device.topics
+                    dd - #{key} : #{val}
+
+        p Do you really want to delete this Device?
+
+        form(method='POST' action='')
+            div.form-group
+                input#device_id.form-control(type='hidden',name='device_id', required='true', value=device._id )
+
+            button.btn.btn-primary(type='submit') Delete

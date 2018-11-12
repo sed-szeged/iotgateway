@@ -1,0 +1,22 @@
+extends layout
+
+block content
+
+    h1 Device: #{data.name}
+
+    div(style='margin-left:20px;margin-top:20px')
+
+        dl
+            dt
+                a(href=data.url) #{data.name}
+            dd Type: #{data.type}
+            dd Superuser: #{data.superuser}
+            dd Topics:
+                each val, key in data.topics
+                    dd - #{key} : #{val}
+
+
+        p
+            a(href=data.url + '/delete') Delete
+        p
+            a(href=data.url + '/update') Update
