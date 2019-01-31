@@ -8,7 +8,7 @@ BACKEND_LDAP ?= no
 BACKEND_HTTP ?= no
 BACKEND_JWT ?= no
 BACKEND_MONGO ?= yes
-BACKEND_FILES ?= no
+BACKEND_FILES ?= yes
 BACKEND_MEMCACHED ?= no
 
 # Specify the path to the Mosquitto sources here

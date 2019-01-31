@@ -31,3 +31,22 @@ services:
         ports:
             - 27017:27017
         command: mongod --profile=2 --smallfiles
+    logger:
+        image: logger
+        build: ./logger
+        container_name: "logger"
+        links:
+            - logdb
+            - mauthp
+        depends_on:
+            - logdb
+    logdb:
+        image: mongo:latest
+        container_name: "logdb"
+        environment:
+          - MONGO_DATA_DIR=/data/db
+        volumes:
+          - .logdb/data/db:/data/db
+        ports:
+            - 27018:27017
+        command: mongod --profile=2 --smallfiles
