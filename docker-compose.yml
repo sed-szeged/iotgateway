@@ -2,34 +2,32 @@ version: '2'
 services:
     mauthp:
         image: mauthp
+        build: ./mosquitto-auth-plugin
         container_name: "mauthp"
-        environment:
-            - FOO=bar
         ports:
             - 1883:1883
             - 9001:9001
         links:
-            - mongodb
+            - authdb
         depends_on:
-            - mongodb
+            - authdb
     mqttadmin:
         image: mqttadmin
+        build: ./mqttadmin
         container_name: "mqttadmin"
-        environment:
-            - FOO=bar
         ports:
             - 3000:3000
         links:
-            - mongodb
+            - authdb
         depends_on:
             - mauthp
-    mongodb:
+    authdb:
         image: mongo:latest
-        container_name: "mongodb"
+        container_name: "authdb"
         environment:
           - MONGO_DATA_DIR=/data/db
         volumes:
-          - ./data/db:/data/db
+          - .authdb/data/db:/data/db
         ports:
             - 27017:27017
         command: mongod --profile=2 --smallfiles

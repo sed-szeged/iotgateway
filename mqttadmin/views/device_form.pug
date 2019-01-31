@@ -12,9 +12,21 @@ block content
         div.form-group
             label(for='password') Password:
             input#password.form-control(type='password', placeholder='Password' name='password' required='true' value='' )
-        //div.form-group
-        //    label(for='superuser') Superuser:
-        //    input#superuser.form-control(type='checkbox', name='superuser' checked=(undefined === device ? '' : device.superuser) )
+        div.form-group
+            label(for='superuser') Superuser:
+            input#superuser.form-control(type='checkbox', name='superuser' checked=(undefined === device ? false : device.superuser) )
+        div.form-group
+            label(for='topics') Topics:
+            script.
+              function genDefaultTopics(){
+                if(document.getElementById("name").value.trim()=="" || document.getElementById("type").value.trim()==""){
+                  document.getElementById("topics").value = "{ \"public/#\" : \"r\"}";
+                }else{
+                  document.getElementById("topics").value = "{ \"public/#\" : \"r\", \"/device/"+document.getElementById("type").value+"/"+document.getElementById("name").value+"/#\" : \"rw\" }";
+                }
+              };
+            button(type='button' onclick='genDefaultTopics()') Generate default topics
+            input#topics.form-control(type='text', placeholder='Topics' name='topics' required='true' value=(undefined===device ? '{ "public/#" : "r" }' : undefined===device.topics ?  '{ "public/#" : "r" }' : JSON.stringify(device.topics, null, 2) ) )
         //div.form-group
         //    label Topics
         //    if undefined === device

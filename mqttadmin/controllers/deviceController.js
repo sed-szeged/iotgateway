@@ -75,6 +75,7 @@ exports.device_create_post = [
     sanitizeBody('name').trim().escape(),
     sanitizeBody('type').trim().escape(),
     sanitizeBody('password').trim().escape(),
+    sanitizeBody('superuser').trim().escape(),
 
     (req, res, next) => {
 
@@ -92,19 +93,21 @@ exports.device_create_post = [
             mosquittoPBKDF2.createPasswordAsync(req.body.password, (pbkdf2Password)=>{
                 //console.log("Hash created: " + pbkdf2Password);
 
-                    var topicsdata = {}
-                    topicsdata["public/#"] = "r";
-                    topicsdata["device/" + req.body.type + "/" + req.body.name + "/#"] = "rw";
+                    //var topicsdata = {}
+                    //topicsdata["public/#"] = "r";
+                    //topicsdata["device/" + req.body.type + "/" + req.body.name + "/#"] = "rw";
+
+                    var topicsdata = JSON.parse(req.body.topics);
 
                     var devicedata = {
                         name: req.body.name,
                         type: req.body.type,
                         password: pbkdf2Password,
-                        topics: {},
-                        superuser: false
+                        topics: topicsdata,
+                        superuser: req.body.superuser ? true : false
                     };
 
-                    devicedata['topics'] = topicsdata;
+                    //devicedata['topics'] = topicsdata;
 
                     // Create a Device object with escaped and trimmed data.
                     var device = new Device(
@@ -186,6 +189,7 @@ exports.device_update_post = [
     sanitizeBody('name').trim().escape(),
     sanitizeBody('type').trim().escape(),
     sanitizeBody('password').trim().escape(),
+    sanitizeBody('superuser').trim().escape(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -194,19 +198,21 @@ exports.device_update_post = [
         const errors = validationResult(req);
 
         // Create Device object with escaped and trimmed data (and the old id!)
-        var topicsdata = {}
-        topicsdata["public/#"] = "r";
-        topicsdata["device/" + req.body.type + "/" + req.body.name + "/#"] = "rw";
+        //var topicsdata = {}
+        //topicsdata["public/#"] = "r";
+        //topicsdata["device/" + req.body.type + "/" + req.body.name + "/#"] = "rw";
+
+        var topicsdata = JSON.parse(req.body.topics);
 
         var devicedata = {
             _id: req.params.id,
             name: req.body.name,
             type: req.body.type,
-            topics: {},
-            superuser: false
+            topics: topicsdata,
+            superuser: req.body.superuser ? true: false
         };
 
-        devicedata['topics'] = topicsdata;
+        //devicedata['topics'] = topicsdata;
 
         // Create a Device object with escaped and trimmed data.
         var device = new Device(

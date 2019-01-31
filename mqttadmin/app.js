@@ -10,7 +10,9 @@ var usersRouter = require('./routes/users');
 
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://mongodb/mqttadmin';
+var mongoDB = 'mongodb://authdb/mqttadmin';
+//var mongoDB = 'mongodb://localhost:27017/mqttadmin';
+
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
