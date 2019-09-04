@@ -30,7 +30,7 @@ services:
           - .authdb/data/db:/data/db
         ports:
             - 27017:27017
-        command: mongod --profile=2 --smallfiles
+        command: mongod --profile=2
     logger:
         image: logger
         build: ./logger
@@ -49,4 +49,4 @@ services:
           - .logdb/data/db:/data/db
         ports:
             - 27018:27017
-        command: mongod --profile=2 --smallfiles
+        command: mongod --profile=2
