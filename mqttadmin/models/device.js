@@ -8,7 +8,8 @@ var DeviceSchema = new Schema(
         type: {type: String},
         password: {type: String, required: true},
         topics: {type: Object},
-        superuser: {type: Boolean}
+        superuser: {type: Boolean},
+        user: {type: String, required: true}
     }
 );
 

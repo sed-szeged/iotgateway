@@ -1,0 +1,18 @@
+extends layout_admin 
+
+block content
+    h1.blueContent #{title} of all users
+
+    ul(class='list-group')
+    each device in device_list
+        li(class='list-group-item deviceList')
+            a(href='/admin'+ device.url) #{device.name}
+            |  (#{device.type})
+            div(class='float-sm-right')
+                a(href='/admin' + device.url + '/update') Update  
+                | | 
+                a(href='/admin' + device.url + '/delete') Delete
+
+    else
+        li(class='list-group-item') There are no devices.
+            

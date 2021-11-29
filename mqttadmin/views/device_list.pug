@@ -1,13 +1,18 @@
 extends layout
 
 block content
-    h1= title
+    h1.blueContent #{title} of #{user.displayName}
 
-    ul
+    ul(class='list-group')
     each device in device_list
-        li
+        li(class='list-group-item deviceList')
             a(href=device.url) #{device.name}
             |  (#{device.type})
+            div(class='float-sm-right')
+                a(href=device.url + '/update') Update  
+                | | 
+                a(href=device.url + '/delete') Delete
 
     else
-        li There are no devices.
+        li(class='list-group-item') There are no devices.
+            

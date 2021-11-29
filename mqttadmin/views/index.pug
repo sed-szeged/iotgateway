@@ -1,15 +1,17 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #[em MQTT Admin]
-
-  h1 Dynamic content
-
-  if error
-    p Error getting dynamic content.
-  else
-    p The MQTT Admin has the following record counts:
-
-    ul
-      li #[strong Devices:] !{data.device_count}
+  div(class='container float-left col-sm-10')
+    img(src=user.image, alt="profile picture", class='float-left profilePicture rounded-circle')
+    div(class='float-left', class='profileData')
+        p
+          | Logged in as: #[strong #{user.displayName}] (#[em #{user.googleId}])
+        a(class='btn btn-primary', role='button' href='/auth/logout') Log out
+  div(class='container float-left col-sm-10')
+    h1.blueContent Dynamic content
+    if error
+      p Error getting dynamic content.
+    else
+      p The MQTT Admin has the following record counts for this account:
+      ul
+        li #[strong Devices:] !{data.device_count}

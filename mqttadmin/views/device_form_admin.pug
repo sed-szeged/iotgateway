@@ -1,0 +1,43 @@
+extends layout_admin
+
+block content
+    h1.blueContent #{title}
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='name') Name:
+            input#name.form-control(type='text', placeholder='Device name' name='name' required='true' value=(undefined===device ? '' : device.name) )
+            label(for='type') Type:
+            input#type.form-control(type='text', placeholder='Device type' name='type' required='true' value=(undefined === device ? '' : device.type) )
+        div.form-group
+            label(for='password') Password:
+            input#password.form-control(type='password', placeholder='Password' name='password' required='true' value='' )
+        div.form-group
+            label(for='superuser') Superuser:
+            input#superuser.form-control(type='checkbox', name='superuser' checked=(undefined === device ? false : device.superuser) )
+        div.form-group
+            label(for='topics') Topics:
+            script.
+              function genDefaultTopics(){
+                if(document.getElementById("name").value.trim()=="" || document.getElementById("type").value.trim()==""){
+                  document.getElementById("topics").value = "{ \"public/#\" : \"r\"}";
+                }else{
+                  document.getElementById("topics").value = "{ \"public/#\" : \"r\", \"/device/"+document.getElementById("type").value+"/"+document.getElementById("name").value+"/#\" : \"rw\" }";
+                }
+              };
+            button(type='button' onclick='genDefaultTopics()') Generate default topics
+            input#topics.form-control(type='text', placeholder='Topics' name='topics' required='true' value=(undefined===device ? '{ "public/#" : "r" }' : undefined===device.topics ?  '{ "public/#" : "r" }' : JSON.stringify(device.topics, null, 2) ) )
+        //div.form-group
+        //    label Topics
+        //    if undefined === device
+        //        input#topic_key.form-control(type='text', placeholder='topic/#' name='topic' required='true' value=(undefined === device ? '' : (key + ' ' + val)) )
+        //    else
+        //        each val, key in device.topics
+        //            input#topic_key.form-control(type='text', placeholder='topic/#' name='topic' required='true' value=(undefined===device ? '' : (key+' '+val)) )
+
+        button.btn.btn-primary(type='submit') Submit
+
+    if errors
+        ul
+            for error in errors
+                li!= error.msg

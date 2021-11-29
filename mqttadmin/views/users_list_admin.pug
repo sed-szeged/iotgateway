@@ -1,0 +1,18 @@
+extends layout_admin 
+
+block content
+    h1.blueContent Registered users
+
+    ul(class='list-group')
+    each person in users_list
+        li(class='list-group-item profileData float-left col-sm-10')
+            img(src=user.image, alt="profile picture", class='float-left profilePicture rounded-circle')
+            div(class='float-left', class='profileData')
+                | #[strong #{person.displayName}] (#[em #{person.googleId}])
+                br
+                | Registered at: #[em #{person.createdAt}]
+                br
+                | Devices: #{person.deviceCount}
+    else
+        li(class='list-group-item') There are no registered users.
+        
